@@ -7,53 +7,50 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const validUsers = [
-  { username: 'admin', password: '123' }, // Replace with your own user validation logic
+    { username: 'admin', password: '123' },
 ];
 
 app.prepare().then(() => {
-  const server = express();
-  server.use(express.json());
-  server.use(cookieParser());
+    const server = express();
+    server.use(express.json());
+    server.use(cookieParser());
 
-  let timers = [0, 0, 0, 0, 0, 0];
-  let controllers = [1, 1, 1, 1, 1, 1];
+    let timers = [0, 0, 0, 0, 0, 0];
+    let controllers = [1, 1, 1, 1, 1, 1];
 
-  // Login endpoint
-  server.post('/api/login', (req, res) => {
-    const { username, password } = req.body;
+    server.post('/api/login', (req, res) => {
+        const { username, password } = req.body;
 
-    const user = validUsers.find(
-      (u) => u.username === username && u.password === password
-    );
+        const user = validUsers.find(
+            (u) => u.username === username && u.password === password
+        );
 
-    if (user) {
-      res.cookie('authToken', 'secure_token', {
-        httpOnly: true,
-        secure: !dev, // Secure cookies in production
-      });
-      res.status(200).json({ message: 'Login successful' });
-    } else {
-      res.status(401).json({ message: 'Invalid username or password' });
-    }
-  });
+        if (user) {
+            res.cookie('authToken', 'secure_token', {
+                httpOnly: true,
+                secure: !dev, // Secure cookies in production
+            });
+            res.status(200).json({ message: 'Login successful' });
+        } else {
+            res.status(401).json({ message: 'Invalid username or password' });
+        }
+    });
 
-  // Auth check middleware
-  const isAuthenticated = (req, res, next) => {
-    const token = req.cookies.authToken;
-    if (token === 'secure_token') {
-      return next();
-    }
-    res.redirect('/login');
-  };
+    const isAuthenticated = (req, res, next) => {
+        const token = req.cookies.authToken;
+        if (token === 'secure_token') {
+        return next();
+        }
+        res.redirect('/login');
+    };
 
-  // Protect your gaming center route
-  server.get('/', isAuthenticated, (req, res) => {
-    return handle(req, res);
-  });
+    server.get('/', isAuthenticated, (req, res) => {
+        return handle(req, res);
+    });
 
-  server.get('/api/timers', isAuthenticated, (req, res) => {
-    res.json({ timers, controllers });
-  });
+    server.get('/api/timers', isAuthenticated, (req, res) => {
+        res.json({ timers, controllers });
+    });
 
     server.post('/api/timers', isAuthenticated, (req, res) => {
         const { index, action, controllerCount } = req.body;
@@ -77,12 +74,12 @@ app.prepare().then(() => {
         res.json({ message: 'Timer and/or controller updated', timers, controllers });
     });
 
-  server.all('*', (req, res) => {
-    return handle(req, res);
-  });
+    server.all('*', (req, res) => {
+        return handle(req, res);
+    });
 
-  server.listen(3000, (err) => {
-    if (err) throw err;
-    console.log('> Ready on http://localhost:3000');
-  });
+    server.listen(3000, (err) => {
+        if (err) throw err;
+        console.log('> Ready on http://localhost:3000');
+    });
 });
