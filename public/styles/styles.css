@@ -1,9 +1,9 @@
 /* Base styling */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Arial', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f4;
+  background-color: #f7f7f7;
 }
 
 /* Container for the entire app */
@@ -12,6 +12,9 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   text-align: center;
+  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Styling for each machine card */
@@ -20,8 +23,8 @@ body {
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 12px;
-  background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -29,6 +32,17 @@ body {
 .machine-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Add PS4 and PS5 Images */
+.machine-card img {
+  max-width: 150px;
+  margin-bottom: 15px;
+  transition: transform 0.3s ease;
+}
+
+.machine-card img:hover {
+  transform: scale(1.1);
 }
 
 /* Styling for buttons group */
@@ -64,6 +78,12 @@ body {
 .reset-button:hover {
   background-color: #c82333;
   transform: scale(1.05);
+}
+
+/* Add emojis for time, cost, and controllers */
+.time-icon, .cost-icon, .controller-icon {
+  font-size: 1.2rem;
+  margin-right: 8px;
 }
 
 /* Media Queries for Responsiveness */

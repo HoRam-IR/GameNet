@@ -1,4 +1,3 @@
-// components/GamingCenter.js (or wherever it's located)
 import { useState, useEffect } from 'react';
 
 export default function GamingCenter() {
@@ -58,7 +57,7 @@ export default function GamingCenter() {
       newRunning[index] = false;
       return newRunning;
     });
-    handleControllerChange(index, 1)
+    handleControllerChange(index, 1);
     await fetch('/api/timers', {
       method: 'POST',
       headers: {
@@ -97,28 +96,32 @@ export default function GamingCenter() {
     return costToman.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   };
 
-    const handleControllerChange = async (index, value) => {
-        setControllers((prev) => {
-        const newControllers = [...prev];
-        newControllers[index] = value;
-        return newControllers;
-        });
-        await fetch('/api/controller', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ index, controllerCount: value }),
-        });
-    };
+  const handleControllerChange = async (index, value) => {
+    setControllers((prev) => {
+      const newControllers = [...prev];
+      newControllers[index] = value;
+      return newControllers;
+    });
+    await fetch('/api/controller', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ index, controllerCount: value }),
+    });
+  };
 
   return (
     <div className="container">
       <h1>Gaming Center Management</h1>
       {timers.map((time, index) => (
         <div key={index} className="machine-card">
-          <h2>Machine {index + 1}</h2>
-          <p>Time: {formatTime(time)}</p>
+          <h2>Device {index + 1}</h2>
+          <img 
+            src={index < 4 ? "/imgs/ps4.png" : "/imgs/ps5.png"} 
+            alt={index < 4 ? "PS4" : "PS5"} 
+          />
+          <p><span className="time-icon">⏰</span>{formatTime(time)}</p>
 
           <div>
             <label htmlFor={`controllers-${index}`}>Controllers: </label>
@@ -133,7 +136,7 @@ export default function GamingCenter() {
             </select>
           </div>
 
-          <p>Cost: {calculateCost(time, index, controllers[index])} Toman</p>
+          <p><span className="cost-icon">💰</span>{calculateCost(time, index, controllers[index])} Toman</p>
 
           <div className="button-group">
             <button onClick={() => startTimer(index)} disabled={running[index]} className="start-button">
