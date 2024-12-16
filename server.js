@@ -55,21 +55,27 @@ app.prepare().then(() => {
     res.json({ timers, controllers });
   });
 
-  server.post('/api/timers', isAuthenticated, (req, res) => {
-    const { index, action, controllerCount } = req.body;
+    server.post('/api/timers', isAuthenticated, (req, res) => {
+        const { index, action, controllerCount } = req.body;
 
-    if (action === 'start') {
-      timers[index] = Date.now();
-    } else if (action === 'reset') {
-      timers[index] = 0;
-    }
+        if (action === 'start') {
+            timers[index] = Date.now();
+        } else if (action === 'reset') {
+            timers[index] = 0;
+        }
 
-    if (controllerCount !== undefined) {
-      controllers[index] = controllerCount;
-    }
+        if (controllerCount !== undefined) {
+            controllers[index] = controllerCount;
+        }
 
-    res.json({ message: 'Timer and/or controller updated', timers, controllers });
-  });
+        res.json({ message: 'Timer and/or controller updated', timers, controllers });
+    });
+
+    server.post('/api/controller', isAuthenticated, (req, res) => {
+        const { index, controllerCount } = req.body;
+        controllers[index] = controllerCount;
+        res.json({ message: 'Timer and/or controller updated', timers, controllers });
+    });
 
   server.all('*', (req, res) => {
     return handle(req, res);

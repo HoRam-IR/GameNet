@@ -90,18 +90,27 @@ export default function GamingCenter() {
     const timeInHours = timeInSeconds / 3600;
     if (controllerCount <= 1){
       controllerRateToman = 0
+    }else{
+      controllerCount = controllerCount - 1
     }
     const costToman = (hourlyRateToman * timeInHours) + (controllerRateToman * controllerCount);
     return costToman.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   };
 
-  const handleControllerChange = (index, value) => {
-    setControllers((prev) => {
-      const newControllers = [...prev];
-      newControllers[index] = value;
-      return newControllers;
-    });
-  };
+    const handleControllerChange = async (index, value) => {
+        setControllers((prev) => {
+        const newControllers = [...prev];
+        newControllers[index] = value;
+        return newControllers;
+        });
+        await fetch('/api/controller', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ index, controllerCount: value }),
+        });
+    };
 
   return (
     <div className="container">
