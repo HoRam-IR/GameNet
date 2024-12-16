@@ -1,45 +1,82 @@
 const express = require('express');
 const next = require('next');
+const cookieParser = require('cookie-parser');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
+const validUsers = [
+  { username: 'admin', password: '123' }, // Replace with your own user validation logic
+];
+
 app.prepare().then(() => {
-    const server = express();
-    let timers = [0, 0, 0, 0, 0, 0]; // Timer state
-    let controllers = [1, 1, 1, 1, 1, 1];
-    
-    server.get('/api/timers', (req, res) => {
-        res.json({ timers, controllers });
-    });
+  const server = express();
+  server.use(express.json());
+  server.use(cookieParser());
 
-    // Update timer and/or controller state
-    server.post('/api/timers', express.json(), (req, res) => {
-        const { index, action, controllerCount } = req.body;
+  let timers = [0, 0, 0, 0, 0, 0];
+  let controllers = [1, 1, 1, 1, 1, 1];
 
-        if (action === 'start') {
-            // Start timer: store current timestamp
-            timers[index] = Date.now();
-        } else if (action === 'reset') {
-            // Reset timer: reset to 0
-            timers[index] = 0;
-        }
+  // Login endpoint
+  server.post('/api/login', (req, res) => {
+    const { username, password } = req.body;
 
-        // Update controller count if provided
-        if (controllerCount !== undefined) {
-            controllers[index] = controllerCount;
-        }
+    const user = validUsers.find(
+      (u) => u.username === username && u.password === password
+    );
 
-        res.json({ message: 'Timer and/or controller updated', timers, controllers });
-    });
+    if (user) {
+      res.cookie('authToken', 'secure_token', {
+        httpOnly: true,
+        secure: !dev, // Secure cookies in production
+      });
+      res.status(200).json({ message: 'Login successful' });
+    } else {
+      res.status(401).json({ message: 'Invalid username or password' });
+    }
+  });
 
-    server.all('*', (req, res) => {
-        return handle(req, res);
-    });
+  // Auth check middleware
+  const isAuthenticated = (req, res, next) => {
+    const token = req.cookies.authToken;
+    if (token === 'secure_token') {
+      return next();
+    }
+    res.redirect('/login');
+  };
 
-    server.listen(3000, (err) => {
-        if (err) throw err;
-        console.log('> Ready on http://localhost:3000');
-    });
+  // Protect your gaming center route
+  server.get('/', isAuthenticated, (req, res) => {
+    return handle(req, res);
+  });
+
+  server.get('/api/timers', isAuthenticated, (req, res) => {
+    res.json({ timers, controllers });
+  });
+
+  server.post('/api/timers', isAuthenticated, (req, res) => {
+    const { index, action, controllerCount } = req.body;
+
+    if (action === 'start') {
+      timers[index] = Date.now();
+    } else if (action === 'reset') {
+      timers[index] = 0;
+    }
+
+    if (controllerCount !== undefined) {
+      controllers[index] = controllerCount;
+    }
+
+    res.json({ message: 'Timer and/or controller updated', timers, controllers });
+  });
+
+  server.all('*', (req, res) => {
+    return handle(req, res);
+  });
+
+  server.listen(3000, (err) => {
+    if (err) throw err;
+    console.log('> Ready on http://localhost:3000');
+  });
 });
