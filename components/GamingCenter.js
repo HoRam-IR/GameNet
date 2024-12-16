@@ -85,9 +85,12 @@ export default function GamingCenter() {
   };
 
   const calculateCost = (timeInSeconds, index, controllerCount) => {
-    const hourlyRateToman = index < 4 ? 45000 : 65000;
-    const controllerRateToman = 5000;
+    const hourlyRateToman = index < 4 ? 40000 : 50000;
+    let controllerRateToman = index < 4 ? 5000 : 10000;
     const timeInHours = timeInSeconds / 3600;
+    if (controllerCount <= 1){
+      controllerRateToman = 0
+    }
     const costToman = (hourlyRateToman * timeInHours) + (controllerRateToman * controllerCount);
     return costToman.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   };
