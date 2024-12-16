@@ -58,13 +58,13 @@ export default function GamingCenter() {
       newRunning[index] = false;
       return newRunning;
     });
-
+    handleControllerChange(index, 1)
     await fetch('/api/timers', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ index, action: 'reset', controllerCount: controllers[index] }),
+      body: JSON.stringify({ index, action: 'reset', controllerCount: 1 }),
     });
   };
 
