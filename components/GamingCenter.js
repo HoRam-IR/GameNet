@@ -144,8 +144,11 @@ export default function GamingCenter() {
         <div key={index} className="machine-card">
           <h2>Device {index + 1}</h2>
           <img src={index < 4 ? '/imgs/ps4.png' : '/imgs/ps5.png'} alt={index < 4 ? 'PS4' : 'PS5'} />
-          <p><span className="time-icon">⏰</span>{formatTime(time)}</p>
-
+          
+          {/* Display Starting Time */}
+          <p><strong>Starting Time:</strong> {formatTime(timers[index])}</p>
+          
+          {/* Timer Input Section */}
           <div>
             <label htmlFor={`manual-time-${index}`}>Set Timer (hh:mm:ss): </label>
             <input
@@ -161,7 +164,8 @@ export default function GamingCenter() {
             />
           </div>
 
-          <div>
+          {/* Controllers Section */}
+          <div className="controllers-container">
             <label htmlFor={`controllers-${index}`}>Controllers: </label>
             <select
               id={`controllers-${index}`}
@@ -174,10 +178,13 @@ export default function GamingCenter() {
             </select>
           </div>
 
+          {/* Cost */}
           <p><span className="cost-icon">💰</span>{calculateCost(time, index, controllers[index])} Toman</p>
 
+          {/* Note Button */}
           <button onClick={() => openNoteModal(index)} className="note-button">📝 Notes</button>
 
+          {/* Buttons Group */}
           <div className="button-group">
             <button onClick={() => startTimer(index, true)} disabled={running[index]} className="start-button">
               Start
@@ -189,6 +196,7 @@ export default function GamingCenter() {
         </div>
       ))}
 
+      {/* Modal for Notes */}
       {modalIndex !== null && (
         <div className="modal">
           <div className="modal-content">
