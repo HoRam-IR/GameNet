@@ -3,10 +3,11 @@ import { useState, useEffect } from 'react';
 export default function GamingCenter() {
   const [timers, setTimers] = useState([0, 0, 0, 0, 0, 0]);
   const [running, setRunning] = useState([false, false, false, false, false, false]);
+  const [manualTimeInput, setManualTimeInput] = useState(Array(6).fill('00:00:00')); // For manual input
   const [controllers, setControllers] = useState([1, 1, 1, 1, 1, 1]);
-  const [notes, setNotes] = useState(['', '', '', '', '', '']); // Notes for each device
-  const [modalIndex, setModalIndex] = useState(null); // Index of the device for the modal
-  const [noteInput, setNoteInput] = useState(''); // Current note input
+  const [notes, setNotes] = useState(['', '', '', '', '', '']);
+  const [modalIndex, setModalIndex] = useState(null);
+  const [noteInput, setNoteInput] = useState('');
 
   // Fetch initial timer, controller, and note data from the server
   useEffect(() => {
@@ -21,11 +22,11 @@ export default function GamingCenter() {
       }
       setTimers(data.timers);
       setControllers(data.controllers);
-      setNotes(data.notes || ['', '', '', '', '', '']); // Fetch notes or set default
+      setNotes(data.notes || ['', '', '', '', '', '']);
       for (let index = 0; index < data.timers.length; index++) {
         let element = data.timers[index];
         if (element > 0) {
-          startTimer(index, true);
+          startTimer(index);
         }
       }
     };
@@ -38,14 +39,20 @@ export default function GamingCenter() {
       newRunning[index] = true;
       return newRunning;
     });
-
-    if (!manual) {
+    let totalSeconds
+    if (manual) {
+      // Parse manual input (hh:mm:ss) and convert to seconds
+      const [hours, minutes, seconds] = manualTimeInput[index].split(':').map(Number);
+      totalSeconds = hours * 3600 + minutes * 60 + seconds;
+      setTimers((prev) => {
+        const newTimers = [...prev];
+        newTimers[index] = totalSeconds;
+        return newTimers;
+      });
       await fetch('/api/timers', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ index, action: 'start', controllerCount: controllers[index] }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ index, action: 'start', controllerCount: controllers[index], totalSeconds: totalSeconds || 0 }),
       });
     }
   };
@@ -64,18 +71,14 @@ export default function GamingCenter() {
     handleControllerChange(index, 1);
     await fetch('/api/timers', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ index, action: 'reset', controllerCount: 1 }),
     });
   };
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimers((prev) => {
-        return prev.map((time, index) => (running[index] ? time + 1 : time));
-      });
+      setTimers((prev) => prev.map((time, index) => (running[index] ? time + 1 : time)));
     }, 1000);
     return () => clearInterval(interval);
   }, [running]);
@@ -108,16 +111,14 @@ export default function GamingCenter() {
     });
     await fetch('/api/controller', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ index, controllerCount: value }),
     });
   };
 
   const openNoteModal = (index) => {
     setModalIndex(index);
-    setNoteInput(notes[index]); // Set current note content
+    setNoteInput(notes[index]);
   };
 
   const closeNoteModal = () => {
@@ -127,8 +128,8 @@ export default function GamingCenter() {
   const saveNote = async () => {
     const updatedNotes = [...notes];
     updatedNotes[modalIndex] = noteInput;
-    setNotes(updatedNotes); // Update the local notes state
-    setModalIndex(null); // Close the modal
+    setNotes(updatedNotes);
+    setModalIndex(null);
     await fetch('/api/notes', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -142,8 +143,23 @@ export default function GamingCenter() {
       {timers.map((time, index) => (
         <div key={index} className="machine-card">
           <h2>Device {index + 1}</h2>
-          <img src={index < 4 ? "/imgs/ps4.png" : "/imgs/ps5.png"} alt={index < 4 ? "PS4" : "PS5"} />
+          <img src={index < 4 ? '/imgs/ps4.png' : '/imgs/ps5.png'} alt={index < 4 ? 'PS4' : 'PS5'} />
           <p><span className="time-icon">⏰</span>{formatTime(time)}</p>
+
+          <div>
+            <label htmlFor={`manual-time-${index}`}>Set Timer (hh:mm:ss): </label>
+            <input
+              id={`manual-time-${index}`}
+              type="text"
+              value={manualTimeInput[index]}
+              onChange={(e) => {
+                const newTime = [...manualTimeInput];
+                newTime[index] = e.target.value;
+                setManualTimeInput(newTime);
+              }}
+              placeholder="00:00:00"
+            />
+          </div>
 
           <div>
             <label htmlFor={`controllers-${index}`}>Controllers: </label>
@@ -163,7 +179,7 @@ export default function GamingCenter() {
           <button onClick={() => openNoteModal(index)} className="note-button">📝 Notes</button>
 
           <div className="button-group">
-            <button onClick={() => startTimer(index)} disabled={running[index]} className="start-button">
+            <button onClick={() => startTimer(index, true)} disabled={running[index]} className="start-button">
               Start
             </button>
             <button onClick={() => resetTimer(index)} className="reset-button">

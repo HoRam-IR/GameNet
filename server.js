@@ -61,10 +61,10 @@ app.prepare().then(() => {
     });
 
     server.post('/api/timers', isAuthenticated, (req, res) => {
-        const { index, action, controllerCount } = req.body;
-
+        const { index, action, controllerCount, totalSeconds } = req.body;
+        console.log(totalSeconds)
         if (action === 'start') {
-            timers[index] = Date.now();
+            timers[index] = Date.now() - totalSeconds*1000;
         } else if (action === 'reset') {
             timers[index] = 0;
         }

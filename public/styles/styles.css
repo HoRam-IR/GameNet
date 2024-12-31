@@ -171,6 +171,68 @@ body {
   }
 }
 
+/* Time Input Field Styling */
+input[type="text"] {
+  width: 150px;  /* Reduced width */
+  padding: 12px 15px;
+  margin-top: 10px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Focused input effect */
+input[type="text"]:focus {
+  outline: none;
+  border-color: #6c63ff;
+  box-shadow: 0 0 6px rgba(108, 99, 255, 0.5);
+}
+
+/* Placeholder styling */
+input::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+/* Disabled input styling */
+input[disabled] {
+  background-color: #f0f0f0;
+  border-color: #ddd;
+  cursor: not-allowed;
+}
+
+/* Time Input Wrapper Styling */
+.time-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+  width: 100%;
+}
+
+.time-input-wrapper span {
+  font-size: 1.2rem;
+  margin-bottom: 8px; /* Space between time and input */
+}
+
+/* Adjust the label appearance */
+.time-input-wrapper label {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-right: 10px;
+  color: #333;
+}
+
+/* Controllers Styling */
+.controllers-container {
+  margin-top: 20px; /* Adds space between controllers and other elements */
+  margin-bottom: 15px; /* Adds space below the controllers */
+}
+
 /* Media Queries for Responsiveness */
 @media (max-width: 768px) {
   .container {
