@@ -146,7 +146,7 @@ export default function GamingCenter() {
           <img src={index < 4 ? '/imgs/ps4.png' : '/imgs/ps5.png'} alt={index < 4 ? 'PS4' : 'PS5'} />
           
           {/* Display Starting Time */}
-          <p><strong>Starting Time:</strong> {formatTime(timers[index])}</p>
+          <p><strong>⏰</strong> {formatTime(timers[index])}</p>
           
           {/* Timer Input Section */}
           <div>
