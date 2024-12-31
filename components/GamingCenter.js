@@ -4,10 +4,13 @@ export default function GamingCenter() {
   const [timers, setTimers] = useState([0, 0, 0, 0, 0, 0]);
   const [running, setRunning] = useState([false, false, false, false, false, false]);
   const [controllers, setControllers] = useState([1, 1, 1, 1, 1, 1]);
+  const [notes, setNotes] = useState(['', '', '', '', '', '']); // Notes for each device
+  const [modalIndex, setModalIndex] = useState(null); // Index of the device for the modal
+  const [noteInput, setNoteInput] = useState(''); // Current note input
 
-  // Fetch initial timer data from the custom server
+  // Fetch initial timer, controller, and note data from the server
   useEffect(() => {
-    const fetchTimers = async () => {
+    const fetchInitialData = async () => {
       const response = await fetch('/api/timers');
       const data = await response.json();
       for (let index = 0; index < data.timers.length; index++) {
@@ -17,7 +20,8 @@ export default function GamingCenter() {
         }
       }
       setTimers(data.timers);
-      setControllers(data.controllers); // Set initial controller state
+      setControllers(data.controllers);
+      setNotes(data.notes || ['', '', '', '', '', '']); // Fetch notes or set default
       for (let index = 0; index < data.timers.length; index++) {
         let element = data.timers[index];
         if (element > 0) {
@@ -25,7 +29,7 @@ export default function GamingCenter() {
         }
       }
     };
-    fetchTimers();
+    fetchInitialData();
   }, []);
 
   const startTimer = async (index, manual) => {
@@ -87,10 +91,10 @@ export default function GamingCenter() {
     const hourlyRateToman = index < 4 ? 40000 : 50000;
     let controllerRateToman = index < 4 ? 5000 : 10000;
     const timeInHours = timeInSeconds / 3600;
-    if (controllerCount <= 1){
-      controllerRateToman = 0
-    }else{
-      controllerCount = controllerCount - 1
+    if (controllerCount <= 1) {
+      controllerRateToman = 0;
+    } else {
+      controllerCount -= 1;
     }
     const costToman = (hourlyRateToman * timeInHours) + (controllerRateToman * controllerCount);
     return costToman.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -111,16 +115,34 @@ export default function GamingCenter() {
     });
   };
 
+  const openNoteModal = (index) => {
+    setModalIndex(index);
+    setNoteInput(notes[index]); // Set current note content
+  };
+
+  const closeNoteModal = () => {
+    setModalIndex(null);
+  };
+
+  const saveNote = async () => {
+    const updatedNotes = [...notes];
+    updatedNotes[modalIndex] = noteInput;
+    setNotes(updatedNotes); // Update the local notes state
+    setModalIndex(null); // Close the modal
+    await fetch('/api/notes', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ index: modalIndex, note: noteInput }),
+    });
+  };
+
   return (
     <div className="container">
       <h1>Gaming Center Management</h1>
       {timers.map((time, index) => (
         <div key={index} className="machine-card">
           <h2>Device {index + 1}</h2>
-          <img 
-            src={index < 4 ? "/imgs/ps4.png" : "/imgs/ps5.png"} 
-            alt={index < 4 ? "PS4" : "PS5"} 
-          />
+          <img src={index < 4 ? "/imgs/ps4.png" : "/imgs/ps5.png"} alt={index < 4 ? "PS4" : "PS5"} />
           <p><span className="time-icon">⏰</span>{formatTime(time)}</p>
 
           <div>
@@ -138,6 +160,8 @@ export default function GamingCenter() {
 
           <p><span className="cost-icon">💰</span>{calculateCost(time, index, controllers[index])} Toman</p>
 
+          <button onClick={() => openNoteModal(index)} className="note-button">📝 Notes</button>
+
           <div className="button-group">
             <button onClick={() => startTimer(index)} disabled={running[index]} className="start-button">
               Start
@@ -148,6 +172,23 @@ export default function GamingCenter() {
           </div>
         </div>
       ))}
+
+      {modalIndex !== null && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Note for Device {modalIndex + 1}</h2>
+            <textarea
+              value={noteInput}
+              onChange={(e) => setNoteInput(e.target.value)}
+              placeholder="Write your note here..."
+            />
+            <div className="modal-actions">
+              <button onClick={saveNote} className="save-button">Save</button>
+              <button onClick={closeNoteModal} className="cancel-button">Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

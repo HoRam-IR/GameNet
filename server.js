@@ -17,6 +17,7 @@ app.prepare().then(() => {
 
     let timers = [0, 0, 0, 0, 0, 0];
     let controllers = [1, 1, 1, 1, 1, 1];
+    let notes = ['', '', '', '', '', '']
 
     server.post('/api/login', (req, res) => {
         const { username, password } = req.body;
@@ -49,7 +50,14 @@ app.prepare().then(() => {
     });
 
     server.get('/api/timers', isAuthenticated, (req, res) => {
-        res.json({ timers, controllers });
+        res.json({ timers, controllers, notes });
+    });
+
+    server.post('/api/notes', isAuthenticated, (req, res) => {
+        const { index, note } = req.body;
+        // Save the note to your database or in-memory storage
+        notes[index] = note;
+        res.status(200).json({ message: 'Note saved successfully!' });
     });
 
     server.post('/api/timers', isAuthenticated, (req, res) => {
