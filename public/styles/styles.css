@@ -266,7 +266,6 @@ body {
 
 /* Time Input Field Styling */
 input[type="text"] {
-  width: 150px;  /* Reduced width */
   padding: 12px 15px;
   margin-top: 10px;
   font-size: 16px;

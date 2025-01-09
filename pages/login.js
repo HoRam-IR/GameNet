@@ -74,8 +74,9 @@ export default function Login() {
           flex-direction: column;
           justify-content: center;
           align-items: center;
+          gap: 1rem;
         }
-          
+
         .login-box {
           display: flex;
           flex-direction: column;
@@ -96,15 +97,15 @@ export default function Login() {
         }
 
         .input-group {
-          margin-bottom: 1rem;
-          text-align: left;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
         }
 
         label {
-          display: block;
           font-size: 0.9rem;
           color: #666;
-          margin-bottom: 0.5rem;
         }
 
         input {
