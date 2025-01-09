@@ -1,5 +1,4 @@
-// pages/index.js
-import GamingCenter from '../components/GamingCenter'; // Adjust path if necessary
+import GamingCenter from "./GamingCenter";
 
 export default function Home() {
   return (

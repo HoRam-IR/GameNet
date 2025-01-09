@@ -1,0 +1,65 @@
+.device-card {
+  font-family: "Arial", sans-serif;
+  /* max-width: 600px; */
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.device-info {
+  text-align: center;
+}
+
+.device-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.device-image {
+  width: 100px;
+  height: auto;
+  margin-bottom: 15px;
+}
+
+.device-details {
+  background-color: #fff;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.time-display {
+  font-size: 18px;
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.cost-display {
+  font-size: 18px;
+  font-weight: bold;
+  color: #28a745;
+  margin-top: 10px;
+}
+
+.cost-icon {
+  font-size: 20px;
+  vertical-align: middle;
+}
+
+.game-section {
+  text-align: center;
+}
+
+.game-section select {
+  /* width: 100%; */
+}
