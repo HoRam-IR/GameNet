@@ -1,28 +1,28 @@
 // pages/login.js
-import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 export default function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const response = await fetch('/api/login', {
-      method: 'POST',
+    const response = await fetch("/api/login", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ username, password }),
     });
 
     if (response.ok) {
-      router.push('/'); // Redirect to the home page
+      router.push("/"); // Redirect to the home page
     } else {
       const data = await response.json();
-      setError(data.message || 'Invalid credentials');
+      setError(data.message || "Invalid credentials");
     }
   };
 
@@ -30,7 +30,7 @@ export default function Login() {
     <div className="login-container">
       <div className="login-box">
         <h1>Welcome Back</h1>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleLogin} className="login-form">
           <div className="input-group">
             <label htmlFor="username">Username</label>
             <input
@@ -54,7 +54,9 @@ export default function Login() {
             />
           </div>
           {error && <p className="error">{error}</p>}
-          <button type="submit" className="login-button">Login</button>
+          <button type="submit" className="login-button">
+            Login
+          </button>
         </form>
       </div>
       <style jsx>{`
@@ -64,11 +66,21 @@ export default function Login() {
           align-items: center;
           height: 100vh;
           background: linear-gradient(135deg, #4facfe, #00f2fe);
-          font-family: 'Arial', sans-serif;
+          font-family: "Arial", sans-serif;
         }
 
+        .login-form {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }
+          
         .login-box {
-          width: 90%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
           max-width: 400px;
           background: #fff;
           padding: 2rem;
@@ -96,7 +108,6 @@ export default function Login() {
         }
 
         input {
-          width: 100%;
           padding: 0.8rem;
           font-size: 1rem;
           border: 1px solid #ccc;

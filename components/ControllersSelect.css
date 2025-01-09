@@ -1,0 +1,41 @@
+.controllers-container {
+  font-family: "Arial", sans-serif;
+  /* max-width: 400px; */
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.controllers-label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  display: flex;
+}
+
+.controllers-select {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #333;
+  transition: border 0.2s, background-color 0.2s;
+}
+
+.controllers-select:focus {
+  border-color: #007bff;
+  background-color: #f1f8ff;
+  outline: none;
+}
+
+.controllers-select:hover {
+  border-color: #0056b3;
+}
