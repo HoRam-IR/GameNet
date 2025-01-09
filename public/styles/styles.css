@@ -20,7 +20,7 @@ body {
 /* Styling for each machine card */
 .machine-card {
   display: flex;
-  flex-direction: column;
+  gap: 20px;
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
