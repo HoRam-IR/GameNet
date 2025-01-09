@@ -45,8 +45,6 @@ export default function GamingCenter() {
       });
 
       await updateTimer(index, "start", controllers[index], totalSeconds);
-    } else {
-      await updateTimer(index, "start", controllers[index]);
     }
   };
 
