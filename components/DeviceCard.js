@@ -39,7 +39,7 @@ export default function DeviceCard({
           className="device-image"
         />
 
-        <div className="device-details">
+        {/* <div className="device-details"> */}
           <p className="time-display">
             <strong>⏰</strong> {formatTime(time)}
           </p>
@@ -52,14 +52,14 @@ export default function DeviceCard({
             <span className="cost-icon">💰</span>
             {calculateCost(time, index, controllers)} تومن
           </p>
-        </div>
+        {/* </div> */}
 
         <NoteSection index={index} note={note} onNoteChange={onNoteChange} />
         <ButtonsGroup running={running} onStart={onStart} onReset={onReset} />
       </div>
-      <div className="game-section">
+      {/* <div className="game-section">
         <GameSelect index={index} selectedOption={selectedCustomOption} onOptionChange={onCustomOptionChange} />
-      </div>
+      </div> */}
     </div>
   );
 }
