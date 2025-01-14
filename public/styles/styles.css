@@ -12,9 +12,18 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   text-align: center;
-  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-  border-radius: 12px;
+  background: linear-gradient(135deg, #117ecb 0%, #2575fc 100%);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #dadada;
+  text-align: center; 
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  letter-spacing: 1px;
 }
 
 /* Styling for each machine card */
@@ -52,12 +61,17 @@ body {
 /* Styling for buttons group */
 .button-group {
   margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 /* Styling for Start, Reset, and Note buttons */
 .start-button,
 .reset-button,
 .note-button {
+  width: 100%;
   padding: 12px 24px;
   margin: 5px;
   border: none;

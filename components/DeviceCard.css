@@ -14,6 +14,11 @@
 
 .device-info {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .device-title {
@@ -30,6 +35,10 @@
 }
 
 .device-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background-color: #fff;
   padding: 15px;
   border: 1px solid #ccc;
@@ -42,13 +51,31 @@
   font-weight: bold;
   color: #007bff;
   margin-bottom: 10px;
+  font-family: "Roboto Mono", monospace;
+  font-size: 2rem;
+  font-weight: bold;
+  /* color: #4caf50; Modern green color */
+  background: #f0f0f0;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
 }
 
 .cost-display {
+  width: 60%;
   font-size: 18px;
   font-weight: bold;
   color: #28a745;
   margin-top: 10px;
+  font-family: "Roboto", sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background: #f0f0f0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
 }
 
 .cost-icon {

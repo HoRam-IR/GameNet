@@ -101,7 +101,7 @@ export default function GamingCenter() {
 
   return (
     <div className="container">
-      <h1>Gaming Center Management</h1>
+      <h1 className="title">Amor Gaming Center Management</h1>
       {timers.map((time, index) => (
         <DeviceCard
           key={index}

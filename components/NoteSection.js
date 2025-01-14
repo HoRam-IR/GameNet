@@ -8,7 +8,7 @@ export default function NoteSection({ index, note, onNoteChange }) {
         id={`note-${index}`}
         value={note}
         onChange={(e) => onNoteChange(e.target.value)}
-        placeholder="Write your note here..."
+        placeholder="متن را اینجا بنویسید..."
         className="note-textarea"
       />
     </div>
